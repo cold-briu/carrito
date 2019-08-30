@@ -1,6 +1,6 @@
 // export default
 class Car {
-    constructor() {
+    constructor(x, y) {
 
         this.isOn = false;
         this.handbrake = true;
@@ -11,10 +11,10 @@ class Car {
         this.blinker = 0
         this.dir = 0;
 
-        this.speed = 10;
+        this.speed = 0;
         this.pos = {
-            x: 200,
-            y: 200
+            x: x,
+            y: y
         }; //x,y position
 
         //float 0 to 1
@@ -22,43 +22,22 @@ class Car {
         this.acceleration = 0;
         this.clutch = 0;
 
-    }
-    render() {
-        square(this.pos.x, this.pos.y, 20)
+        this.maxofmax = 7;
+
     }
 
-    turnOn() {
-        console.log('Turning on...');
 
+    ignitiON() {
         (this.handbrake && this.seatbelt && this.clutch === 1 &&
             this.gear === 0 && this.dir === 0) ?
             this.isOn = true
             :
             console.log("Err: Set gear to neutral")
 
-        console.log(this.isOn);
+        console.log(`this cars isOn ${this.isOn}`);
     }
 
-    move() {
 
-        switch (this.dir) {
-            case 0:
-                this.pos.y -= this.speed * this.acceleration
-                break;
-            case 1:
-                this.pos.x += this.speed * this.acceleration
-                break;
-            case 2:
-                this.pos.y += this.speed * this.acceleration
-                break;
-            case -1:
-                this.pos.x -= this.speed * (this.acceleration / 2)
-                break;
-        }
-
-        // console.log(this.pos);
-
-    }
 
     switchHandbrake() {
         this.handbrake === true ?
@@ -66,7 +45,7 @@ class Car {
             :
             this.handbrake = true
 
-        return console.log("HandBrake is now set to " + this.handbrake);
+        console.log("HandBrake is now set to " + this.handbrake);
     }
 
     switchSeatbelt() {
@@ -80,57 +59,46 @@ class Car {
 
     setClutch(input) {
         this.clutch = input
-        return console.log(`Clutch is now set to ${this.clutch}`);
+        console.log(`Clutch is now set to ${this.clutch}`);
     }
     setBrake(input) {
         this.brake = input
-        return console.log(`Brake is now set to ${this.brake}`);
+        console.log(`Brake is now set to ${this.brake}`);
     }
 
     setAcceleration(input) {
         this.acceleration = input
-        // return console.log(`Acceleration is now set to ${this.acceleration}`);
+        return console.log(`Acceleration is now set to ${this.acceleration}`);
     }
     setBlinker(input) {
         this.blinker = input;
         // return console.log(`Blinker is now set to ${this.blinker}`);
     }
 
-    setGear(input) {
-        switch (input) {
-            case 0:
-                this.gear = 0
-                console.log(`Gear is now set to neutral`);
-                break;
-            case 1:
-                this.gear = 1
-                console.log(`Gear is now set to ${this.gear}`);
-                break;
-            case 2:
-                this.gear = 2
-                console.log(`Gear is now set to ${this.gear}`);
-                break;
-            case 3:
-                this.gear = 3
-                console.log(`Gear is now set to ${this.gear}`);
-                break;
-            case 4:
-                this.gear = 4
-                console.log(`Gear is now set to ${this.gear}`);
-                break;
-            case 5:
-                this.gear = 5
-                console.log(`Gear is now set to ${this.gear}`);
-                break;
-            case 6:
-                this.gear = 6
-                console.log(`Gear is now set to ${this.gear}`);
-                break;
-            default:
-                console.log('ERR: Please set input: 0,1,2,3,4,5,6')
-                break;
+    gearUp() {
+        if (this.gear === 6) {
+            this.setAcceleration(1)
+            console.log("err: you are on max gear");
+        } else if (this.clutch == 1 && this.acceleration === 0) {
+            this.gear++
+            console.log(`Gear is now set to ${this.gear}`);
+        } else {
+            console.log("Set clutch to 1 and acceleration to 0, then change gear");
+        }
+
+    }
+
+    gearDown() {
+        if (this.gear === 0) {
+            console.log("err: you are on neutral gear");
+        } else if (this.clutch === 1 && this.acceleration === 0) {
+            this.gear--
+            console.log(`Gear is now set to ${this.gear}`);
+        } else {
+            console.log("Set clutch to 1 and acceleration to 0, then change gear");
         }
     }
+
 
 
     turnDir(input) {
@@ -160,16 +128,16 @@ class Car {
 
                 // console.log(`Dir is now set to ${this.dir}`);
                 break
-            case "down":
+            case "back":
                 this.blinker == 2 ?
                     this.dir = 2
                     :
-                    console.log(' ERR: Please set blinker to 0')
+                    console.log(' ERR: Please set blinker to 2')
 
                 // console.log(`Dir is now set to ${this.dir}`);
                 break
             default:
-                console.log('ERR: Please set input: "right","left","front"')
+                console.log('ERR: Please set input: "right","left","front or down"')
 
                 break;
         }
